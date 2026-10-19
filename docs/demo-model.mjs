@@ -33,10 +33,18 @@ export function classify(input,{minutes=10,confidenceOverride=null}={}) {
     const valid=r&&typeof r.time==="number"&&Number.isFinite(r.time)&&r.time>=0&&
       typeof r.distance==="number"&&Number.isFinite(r.distance)&&r.distance>=0;
     const seconds=valid?r.time:null;
-    const verdict=conf<0.65||!valid?"INCONCLUSIVE":
+    // Geodesic is a physical lower bound; routes cannot substantially undercut it.
+    // 3m/s is a conservative walking-speed sanity ceiling, not a certification.
+    const distancePossible=valid&&r.distance+Math.max(15,0.03*direct)>=direct;
+    const timePossible=valid&&(r.distance<=15||r.time>0)&&
+      (r.time===0||r.distance/r.time<=3);
+    const plausible=Boolean(valid&&distancePossible&&timePossible);
+    const verdict=conf<0.65||!plausible?"INCONCLUSIVE":
       seconds<=minutes*60?"CONFIRMED_ESTIMATE":"CONTRADICTED_ESTIMATE";
     const reason=conf<0.65?"Origin has low confidence; cannot assert walking time.":
       !valid?"No valid walking route; direct distance is not enough.":
+      !distancePossible?"Route distance shorter than geodesic lower bound.":
+      !timePossible?"Route speed inconsistent with walking.":
       verdict==="CONFIRMED_ESTIMATE"?"Synthetic pedestrian route fits the budget.":
       "Synthetic pedestrian route exceeds the budget.";
     return {

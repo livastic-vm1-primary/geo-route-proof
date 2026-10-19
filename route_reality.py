@@ -79,6 +79,26 @@ def route_of(data):
         return None
     return {"walkDistanceM":round(float(distance),1),"walkDurationS":round(float(time),1)}
 
+def route_physical_consistency(route, straight_line_m):
+    """Conservative sanity checks for a claimed pedestrian route.
+
+    A route cannot materially undercut the great-circle lower bound.
+    A route completed faster than a 3 m/s walking ceiling is flagged for
+    review, NOT treated as physical evidence. Neither gate certifies access.
+    """
+    if route is None:
+        return False, "route missing or malformed"
+    distance=route["walkDistanceM"]
+    duration=route["walkDurationS"]
+    geodesic_tolerance=max(15.0, 0.03*straight_line_m)
+    if distance+geodesic_tolerance < straight_line_m:
+        return False, "route distance shorter than geodesic lower bound"
+    if distance>15 and duration==0:
+        return False, "nonzero walking distance has zero route duration"
+    if duration>0 and distance/duration>3.0:
+        return False, "route speed inconsistent with walking"
+    return True, ""
+
 def audit(geocode, places, routes, *, minutes=10, limit=3):
     if not (1 <= minutes <= 60 and 1 <= limit <= 6):
         raise ValueError("limits out of range")
@@ -87,10 +107,11 @@ def audit(geocode, places, routes, *, minutes=10, limit=3):
     for i, p in enumerate(venues_of(places,limit)):
         straight = round(distance_m((origin["lat"],origin["lon"]),(p["lat"],p["lon"])),1)
         route = route_of(routes[i]) if i < len(routes) else None
+        physically_possible,physical_reason=route_physical_consistency(route,straight)
         if not origin["confident"]:
             verdict,why="INCONCLUSIVE","origin geocoding ambiguous"
-        elif route is None:
-            verdict,why="INCONCLUSIVE","route missing or malformed"
+        elif not physically_possible:
+            verdict,why="INCONCLUSIVE",physical_reason
         elif route["walkDurationS"] <= 60*minutes:
             verdict,why="CONFIRMED_ESTIMATE","walk route estimate within budget"
         else:
