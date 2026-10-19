@@ -47,3 +47,7 @@ Official Routing: https://apidocs.geoapify.com/docs/routing/
 Program: https://www.geoapify.com/open-geospatial-program/
 
 MIT for the author-written Python code. Upstream provider, model, OpenStreetMap and external data rights remain with their owners. No funding or payment has been accepted as of October 20, 2026.
+
+## AI-assisted design and testing record
+
+The public [AI-assisted build log](docs/AI_BUILD_LOG.md) records the original scope, actual source checks, conservative corrections, 13/13 offline tests and explicitly uncompleted sponsor-key/MCP/live-data work. There is no grant award or buyer contract yet.
