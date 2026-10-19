@@ -51,3 +51,16 @@ MIT for the author-written Python code. Upstream provider, model, OpenStreetMap 
 ## AI-assisted design and testing record
 
 The public [AI-assisted build log](docs/AI_BUILD_LOG.md) records the original scope, actual source checks, conservative corrections, 13/13 offline tests and explicitly uncompleted sponsor-key/MCP/live-data work. There is no grant award or buyer contract yet.
+
+## Working interactive preview (explicitly fictional)
+
+**[Open the published GeoRouteProof demo](https://livastic-vm1-primary.github.io/geo-route-proof/)** — a genuinely deployed GitHub Pages build on the original author's repository. The preview is self-contained and uses only the **SYNTHETIC** JSON in `docs/demo-input.json`. It is not a Geoapify API result, does not know your location, and never asks for or embeds a live API key.
+
+The browser displays the same default outcomes as the original Python fixture: Fictional Cafe A CONFIRMED_ESTIMATE (470 seconds), Fictional Cafe B CONTRADICTED_ESTIMATE (800 seconds), and Fictional Cafe C INCONCLUSIVE (no valid walk route) at 10 minutes. Change the budget to 4 or 14 minutes, or simulate low origin confidence 0.40; a low-confidence origin always makes all three inconclusive.
+
+    node --test tests/demo.test.mjs
+    python3 -B -m unittest discover -s tests -v
+
+**Verification actually performed:** Python tests 13/13 PASS, JavaScript classifier tests 10/10 PASS, HTML safe text-only DOM rendering checks PASS, source code committed/pushed, GitHub Pages built, live homepage and local fixture HTTP200. A real Chrome browser on VM1 showed the 1/1/1 original result, low-confidence 0/0/3, and reset 1/1/1. Neither original Geoapify API key calls nor project selection, awarded sponsorship or real funds have been claimed.
+
+Actual live geospatial analysis still uses `route_reality.py` and requires the owner's separate legitimate `GEOAPIFY_API_KEY`. Geoapify's selected-project extended key will only be provided if the original one-owner application is genuinely selected. The application is pending; this preview is supporting public evidence only.

@@ -34,3 +34,11 @@ No wallet assets, gas, identities or project secrets were needed for the existin
 - https://apidocs.geoapify.com/docs/geocoding/forward-geocoding/
 - https://apidocs.geoapify.com/docs/places/
 - https://apidocs.geoapify.com/docs/routing/
+
+## 2026-10-20 · Deployable interface tested, not a live venue demo
+
+Independent evidence after the original Oct20 Geoapify program application: added a new fully static, reproducible `docs/index.html` interactive preview, `docs/demo-model.mjs` pure classifier, separately validated `docs/demo-input.json` derived exclusively from the original fictional `tests/fixtures/demo.json`, and `tests/demo.test.mjs` with ten fail-closed cases. No new npm dependencies and no private key in public Git.
+
+**Test truth:** Original Python test suite 13/13 PASS. Browser classifier JS suite 10/10 PASS. Same original default verdicts A within470s, B over800s, C missing route. Mock origin confidence0.40 yields all inconclusive even for short duration. Both browser and source prominently say the results are synthetic and not actual Seoul or Geoapify production data. No real provider requests were made.
+
+Original GitHub main commit `319071f0c9d38fd7ced1399257f8cee6c6b45754` was pushed and remote HEAD identical. First-party GitHub Pages main:/docs build succeeded; live `https://livastic-vm1-primary.github.io/geo-route-proof/` returned HTTPS200 and actual Chrome UI rendered all three venues; low-confidence checkbox turned 1/1/1 into0/0/3, reset restored1/1/1. This is not the same as grant acceptance, approved final submission, paid developer commission, or verified sponsor payout. Original one-owner received **0 EUR and 0 new USDC** from this work so far.
