@@ -1,0 +1,78 @@
+{
+  "schema": "georouteproof-demo-v1",
+  "synthetic": true,
+  "source": "fictional-provider-shaped-offline-unit-test-fixture",
+  "geocode": {
+    "results": [
+      {
+        "lat": 37.555,
+        "lon": 126.972,
+        "formatted": "Synthetic Station, Seoul",
+        "rank": {
+          "confidence": 0.98
+        }
+      }
+    ]
+  },
+  "places": {
+    "features": [
+      {
+        "properties": {
+          "name": "Fictional Cafe A",
+          "place_id": "synthetic:a"
+        },
+        "geometry": {
+          "coordinates": [
+            126.975,
+            37.557
+          ]
+        }
+      },
+      {
+        "properties": {
+          "name": "Fictional Cafe B",
+          "place_id": "synthetic:b"
+        },
+        "geometry": {
+          "coordinates": [
+            126.98,
+            37.559
+          ]
+        }
+      },
+      {
+        "properties": {
+          "name": "Fictional Cafe C",
+          "place_id": "synthetic:c"
+        },
+        "geometry": {
+          "coordinates": [
+            126.977,
+            37.555
+          ]
+        }
+      }
+    ]
+  },
+  "routes": [
+    {
+      "results": [
+        {
+          "distance": 550,
+          "time": 470
+        }
+      ]
+    },
+    {
+      "results": [
+        {
+          "distance": 1400,
+          "time": 800
+        }
+      ]
+    },
+    {
+      "results": []
+    }
+  ]
+}

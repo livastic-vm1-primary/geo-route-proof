@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeoRouteProof — Is it really a ten-minute walk?</title>
+<meta name="description" content="GeoRouteProof: an open-source AI-assisted walking-time claim checker. Try a clearly labeled fictional Geoapify-shaped demo, with no keys or wallet.">
+<style>
+:root{color-scheme:light;--ink:#1b2d23;--muted:#627568;--line:#dbe2d9;--forest:#285b3f;--card:#fffefa;--sand:#f6f5ee;--mint:#eaf4df}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--sand);color:var(--ink);font:16px/1.52 system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:var(--forest);text-underline-offset:4px}a:hover{text-decoration-thickness:2px}.wrap{max-width:1100px;margin:auto;padding:24px 24px 66px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{text-decoration:none;color:var(--ink);font-size:23px;font-weight:850;letter-spacing:-.06em}.brand span{color:var(--forest)}
+nav{display:flex;gap:21px;color:var(--muted);font-size:13px;font-weight:700}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--forest);font-weight:850}
+.hero{padding:67px 0 38px;display:flex;align-items:end;justify-content:space-between;gap:24px}.hero h1{font-size:clamp(40px,7vw,72px);line-height:1.04;letter-spacing:-.072em;margin:18px 0 20px}.hero h1 span{color:var(--forest)}
+.lead{max-width:740px;color:#4e6858;font-size:18px;margin:0}.hero-panel{background:#dcebd3;border-radius:20px;border:1px solid #c5d7bf;min-width:168px;padding:21px;text-align:center}.hero-panel b{color:var(--forest);font-size:31px;letter-spacing:-.06em;display:block}.hero-panel small{display:block;color:#527051;font-size:11px}
+.notice{border-left:5px solid #caa05c;background:#fff1d9;color:#6b512c;border-radius:8px;padding:15px 18px;font-size:13px;margin:0 0 26px}
+.tool{display:grid;grid-template-columns:315px minmax(0,1fr);gap:16px;align-items:start}.panel{background:var(--card);border-radius:17px;border:1px solid var(--line);box-shadow:0 8px 25px #26402a1b}.controls,.results{padding:25px}
+h2{margin:0 0 7px;line-height:1.2;letter-spacing:-.045em;font-size:22px}.muted{color:var(--muted);font-size:13px;margin:0 0 20px}.control-head{display:flex;justify-content:space-between;align-items:end;gap:12px}.control-head label{font-size:13px;font-weight:750}.control-head output{font-size:24px;color:var(--forest);font-weight:850}
+input[type=range]{width:100%;accent-color:var(--forest);margin:20px 0 5px}.range-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.rule{border-top:1px solid var(--line);margin:24px 0}.checkbox{display:flex;gap:10px;font-size:13px;cursor:pointer}.checkbox input{accent-color:var(--forest);height:17px;width:17px;flex:none;margin-top:2px}.checkbox strong{display:block}
+.note{font-size:12px;color:var(--muted);margin:12px 0 0}.btn{font-size:13px;font-weight:750;border-radius:9px;padding:10px 16px;background:var(--forest);color:white;text-decoration:none;border:0;cursor:pointer;display:inline-block}.btn.secondary{background:#eaf2e6;color:var(--forest);border:1px solid #d6dfd2}.btn:hover{filter:brightness(.95)}.btn:focus-visible,input:focus-visible{outline:3px solid #dba85a;outline-offset:3px}
+.statusline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.confidence{display:inline-block;background:var(--mint);font-size:12px;border-radius:8px;padding:7px 9px;color:var(--forest);font-weight:750}
+.smallcaps{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:750}.counts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 10px}
+.count{background:#f6f8f3;border-radius:9px;border:1px solid var(--line);padding:10px 12px;font-size:12px;color:var(--muted)}.count b{display:block;color:var(--ink);font-size:25px;letter-spacing:-.05em}
+.place{padding:17px 0;border-top:1px solid var(--line)}.place-header{display:flex;justify-content:space-between;gap:10px;align-items:center}.place h3{font-size:17px;letter-spacing:-.035em;margin:0}.badge{padding:5px 8px;font-weight:800;font-size:11px;border-radius:7px;white-space:nowrap}
+.good{color:#256141;background:#e2f1e1}.bad{color:#9a4c3b;background:#f9e8e0}.unknown{color:#926120;background:#fff1d4}.details{margin:9px 0;color:var(--muted);font-size:12px;display:flex;flex-wrap:wrap;gap:8px 17px}.details b{color:var(--ink)}
+.reason{font-size:13px;color:#526456;margin:0}.method{margin:26px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.step{padding:19px;border-radius:12px;border:1px solid #d8e3d1;background:#eaf1e7}.step b{display:block;font-size:14px}.step p{margin:9px 0 0;font-size:12px;color:#546455}.num{display:inline-block;background:#d3e5cc;border-radius:50%;color:var(--forest);font-size:14px;width:27px;height:27px;line-height:27px;text-align:center;margin-bottom:11px}
+.bottom{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap;margin:21px 0}.foot{padding-top:30px;font-size:12px;color:var(--muted);max-width:850px}
+@media(max-width:800px){.tool{grid-template-columns:1fr}.hero{display:block;padding-top:43px}.hero-panel{margin-top:24px;text-align:left;width:max-content}.method{grid-template-columns:1fr}.wrap{padding:18px 16px 50px}nav{gap:12px}.statusline{flex-wrap:wrap}}
+@media(max-width:420px){.counts{grid-template-columns:1fr 1fr}.place-header{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body><div class="wrap">
+<header><a class="brand" href="./">Geo<span>Route</span>Proof</a><nav><a href="#try">Try the demo</a><a href="#method">Method</a><a href="https://github.com/livastic-vm1-primary/geo-route-proof">Source ↗</a></nav></header>
+<main>
+<section class="hero">
+<div><div class="eyebrow">Source-grounded estimates · Original open-source AI-assisted prototype</div>
+<h1>Is it really<br><span>a ten-minute walk?</span></h1>
+<p class="lead">A straight line is not a sidewalk. Explore how confidence in a geocoded origin, available places, and modeled walking routes change an AI assistant's answer.</p></div>
+<div class="hero-panel"><b>3 outcomes</b><small>Fits · Exceeds · Unknown</small></div>
+</section>
+<div class="notice"><strong>Fictional offline demo, not a live map.</strong> All locations and route durations below are synthetic test fixtures. The page never reads your position, uses an API key, requests a payment, or makes a Geoapify network call. Actual results require the separate key-authorized Python tool.</div>
+<section class="tool" id="try">
+<div class="panel controls"><div class="eyebrow">Experiment with evidence</div><h2>Set the walking budget</h2><p class="muted">One set of synthetic input data. See how the claimed time and location certainty affect the verdict.</p>
+<div class="control-head"><label for="budget">Maximum walk duration</label><output id="budget-value" for="budget">10 min</output></div>
+<input id="budget" type="range" min="2" max="30" step="1" value="10">
+<div class="range-labels"><span>2 min</span><span>30 min</span></div>
+<div class="rule"></div>
+<label class="checkbox"><input type="checkbox" id="uncertain"><span><strong>Simulate ambiguous geocoding</strong>Temporarily reduce origin confidence below 0.65; the answer should stop asserting a route.</span></label>
+<p class="note">Origin confidence in the fixture: 0.98. Low-confidence scenario: 0.40.</p>
+<div class="rule"></div><button type="button" class="btn secondary" id="reset">Reset controls</button>
+</div>
+<div class="panel results"><div class="statusline"><div><div class="smallcaps">Synthetic origin · fictional venues</div><h2 id="origin">Loading fixture…</h2></div><span class="confidence" id="confidence">Checking</span></div>
+<div class="counts" aria-label="Classification counts"><div class="count"><b id="good">—</b>Fits estimate</div><div class="count"><b id="bad">—</b>Exceeds estimate</div><div class="count"><b id="unknown">—</b>Inconclusive</div></div>
+<div id="places" aria-live="polite"><p class="muted">Loading offline, synthetic data…</p></div>
+</div>
+</section>
+<section class="method" id="method">
+<div class="step"><span class="num">1</span><b>Geocode the public origin</b><p>Check the confidence score rather than inventing coordinates for an ambiguous place.</p></div>
+<div class="step"><span class="num">2</span><b>Find relevant public venues</b><p>GeoJSON uses longitude–latitude ordering. Direct distance does not demonstrate a usable path.</p></div>
+<div class="step"><span class="num">3</span><b>Compare walking route estimates</b><p>If the source route is missing, or time exceeds budget, do not claim a short walk.</p></div>
+</section>
+<div class="bottom"><a class="btn" href="https://github.com/livastic-vm1-primary/geo-route-proof#run-against-actual-geoapify-apis-using-your-own-authorized-key">Run real API checks with your key ↗</a><a href="https://www.geoapify.com/open-geospatial-program/">Geoapify's open geospatial program ↗</a></div>
+</main>
+<footer class="foot">PaperPilot Tools © 2026. Built with disclosed AI assistance for one economic human owner. This is a <strong>synthetic fixture only</strong>, not a measurement of Seoul cafes or any real location. No EUR sponsorship selection, finished sponsor milestone, paid customer, crypto transaction, accessibility certification or opening-hours guarantee is claimed. Source logic and executable tests are public.</footer>
+</div>
+<script type="module">
+import {classify} from "./demo-model.mjs";
+const get=id=>document.getElementById(id);
+const budget=get("budget"),uncertain=get("uncertain"),places=get("places");
+let fixture=null;
+function metric(text,value) {
+ const span=document.createElement("span"),bold=document.createElement("b");
+ span.textContent=text+" ";bold.textContent=value;span.append(bold);return span;
+}
+function render() {
+ if(!fixture)return;
+ try{
+  const r=classify(fixture,{minutes:Number(budget.value),confidenceOverride:uncertain.checked?0.4:null});
+  get("budget-value").textContent=r.minutes+" min";
+  get("origin").textContent=r.origin;
+  get("confidence").textContent="Geocoder "+r.confidence.toFixed(2)+(r.confidence<0.65?" · ambiguous":" · credible");
+  get("good").textContent=String(r.counts[0]);get("bad").textContent=String(r.counts[1]);get("unknown").textContent=String(r.counts[2]);
+  places.replaceChildren();
+  for(const p of r.assessments){
+   const container=document.createElement("article");container.className="place";
+   const header=document.createElement("div");header.className="place-header";
+   const h=document.createElement("h3");h.textContent=p.name;header.append(h);
+   const tag=document.createElement("span");
+   tag.className="badge "+(p.verdict==="CONFIRMED_ESTIMATE"?"good":p.verdict==="CONTRADICTED_ESTIMATE"?"bad":"unknown");
+   tag.textContent=p.verdict==="CONFIRMED_ESTIMATE"?"Fits estimate":p.verdict==="CONTRADICTED_ESTIMATE"?"Exceeds estimate":"Inconclusive";
+   header.append(tag);
+   const m=document.createElement("div");m.className="details";
+   m.append(metric("Direct distance:",p.directM+" m"),metric("Modeled walk:",p.seconds===null?"unavailable":(p.seconds/60).toFixed(1)+" min"));
+   const why=document.createElement("p");why.className="reason";why.textContent=p.reason;
+   container.append(header,m,why);places.append(container);
+  }
+ }catch(error){places.textContent="Invalid synthetic fixture: "+String(error.message||error);}
+}
+budget.addEventListener("input",render);
+uncertain.addEventListener("change",render);
+get("reset").addEventListener("click",()=>{budget.value="10";uncertain.checked=false;render();});
+try{
+ const response=await fetch("./demo-input.json",{cache:"no-store"});
+ if(!response.ok)throw Error("fictional fixture not published");
+ fixture=await response.json();render();
+}catch(error){places.textContent="Offline preview unavailable: "+String(error.message||error);}
+</script></body></html>
